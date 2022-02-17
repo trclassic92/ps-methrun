@@ -2,6 +2,12 @@ fx_version 'cerulean'
 
 game 'gta5'
 
+shared_scripts {
+    '@qb-core/shared/locale.lua',
+    'locales/en.lua', -- change en to your language
+    'config.lua',
+}
+
 client_scripts{
     'client/*.lua',
 }
@@ -9,5 +15,3 @@ client_scripts{
 server_scripts{
     'server/*.lua',
 }
-
-shared_script 'config.lua' 

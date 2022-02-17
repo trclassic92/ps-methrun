@@ -71,9 +71,9 @@ end)
 function RunStart()
 	Citizen.Wait(2000)
 	TriggerServerEvent('qb-phone:server:sendNewMail', {
-	sender = "Unknown",
-	subject = "Vehicle Location",
-	message = "Updated your gps with the location to a vehicle I got a tip about that contains a briefcase. Retrieve whats inside it and bring it back to me. I've given you a special key that would be used to remove the first layer of security on the case.",
+	sender = Lang:t('mailstart.sender'),
+	subject = Lang:t('mailstart.subject'),
+	message = Lang:t('mailstart.message'),
 	})
 	Citizen.Wait(3000)
 end
@@ -82,13 +82,13 @@ function Itemtimemsg()
     Citizen.Wait(2000)
 
 	TriggerServerEvent('qb-phone:server:sendNewMail', {
-	sender = "Unknown",
-	subject = "Goods Collection",
-	message = "Looks like you got the goods, the case should unlock automatically 5 minutes after you unlocked the first layer of security on it. Once completed bring back the items to me and get paid.",
+    sender = Lang:t('mail.sender'),
+	subject = Lang:t('mail.subject'),
+	message = Lang:t('mail.message'),
 	})
     Citizen.Wait(Config.Itemtime)
     TriggerServerEvent('ps-methrun:server:givecaseitems')
-    QBCore.Functions.Notify("Security case has been unlocked.", "success")
+    QBCore.Functions.Notify(Lang:t("success.case_has_been_unlocked"), 'success')
 end
 ---
 RegisterNetEvent('ps-methrun:client:start', function ()
@@ -96,7 +96,7 @@ RegisterNetEvent('ps-methrun:client:start', function ()
         QBCore.Functions.TriggerCallback("ps-methrun:server:coolc",function(isCooldown)
             if not isCooldown then
                 TriggerEvent('animations:client:EmoteCommandStart', {"idle11"})
-                QBCore.Functions.Progressbar("start_job", "Talking to boss..", 10000, false, true, {
+                QBCore.Functions.Progressbar("start_job", Lang:t('info.talking_to_boss'), 10000, false, true, {
                     disableMovement = true,
                     disableCarMovement = true,
                     disableMouse = false,
@@ -109,14 +109,14 @@ RegisterNetEvent('ps-methrun:client:start', function ()
 
                 end, function() -- Cancel
                     TriggerEvent('animations:client:EmoteCommandStart', {"c"})
-                    QBCore.Functions.Notify("Canceled..", "error")
+                    QBCore.Functions.Notify(Lang:t("error.canceled"), 'error')
                 end)
             else
-                QBCore.Functions.Notify("Someone recently did this, try again later..", "error")
+                QBCore.Functions.Notify(Lang:t("error.someone_recently_did_this"), 'error')
             end
         end)
     else
-        QBCore.Functions.Notify("Cannot do this right now...", "error")
+        QBCore.Functions.Notify(Lang:t("error.cannot_do_this_right_now"), 'error')
     end
 end)
 
@@ -212,7 +212,7 @@ RegisterNetEvent('ps-methrun:client:items', function()
             exports["memorygame_2"]:thermiteminigame(8, 3, 2, 20,
             function() -- Success
                 TriggerEvent('animations:client:EmoteCommandStart', {"type3"})
-                QBCore.Functions.Progressbar("grab_case", "Unlocking case..", 10000, false, true, {
+                QBCore.Functions.Progressbar("grab_case", Lang:t('info.unlocking_case'), 10000, false, true, {
                     disableMovement = true,
                     disableCarMovement = true,
                     disableMouse = false,
@@ -228,19 +228,19 @@ RegisterNetEvent('ps-methrun:client:items', function()
                     if (IsPedActiveInScenario(PlayerPedId()) == false) then
                     SetEntityAsMissionEntity(case, 1, 1)
                     DeleteEntity(case)
-                    QBCore.Functions.Notify("You removed the the first layer of security on the case", "success")
+                    QBCore.Functions.Notify(Lang:t("success.you_removed_first_security_case"), 'success')
                     Itemtimemsg()
                 end
                 end, function()
                     TriggerEvent('animations:client:EmoteCommandStart', {"c"})
-                    QBCore.Functions.Notify("Cancelled..", "error")
+                    QBCore.Functions.Notify(Lang:t("error.canceled"), 'error')
                 end)
             end,
             function() -- Fail thermite game
-                QBCore.Functions.Notify("You failed!")
+                QBCore.Functions.Notify(Lang:t("error.you_failed"), 'error')
             end)
         else
-            QBCore.Functions.Notify("You cannot do this..", "error")
+            QBCore.Functions.Notify(Lang:t("error.you_cannot_do_this"), 'error')
         end
 
     end, "casekey")
@@ -250,7 +250,7 @@ RegisterNetEvent('ps-methrun:client:reward', function()
     QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
         if result then
             TriggerEvent('animations:client:EmoteCommandStart', {"suitcase2"})
-            QBCore.Functions.Progressbar("product_check", "Checking Quality", 7000, false, true, {
+            QBCore.Functions.Progressbar("product_check", Lang:t('info.checking_quality'), 7000, false, true, {
                 disableMovement = true,
                 disableCarMovement = true,
                 disableMouse = false,
@@ -261,13 +261,13 @@ RegisterNetEvent('ps-methrun:client:reward', function()
                 ClearPedTasks(PlayerPedId())
                 TriggerServerEvent('ps-methrun:server:rewardpayout')
 
-                QBCore.Functions.Notify("You got paid", "success")
+                QBCore.Functions.Notify(Lang:t("success.you_got_paid"), 'success')
             end, function()
                 TriggerEvent('animations:client:EmoteCommandStart', {"c"})
-                QBCore.Functions.Notify("Cancelled..", "error")
+                QBCore.Functions.Notify(Lang:t("error.canceled"), 'error')
             end)
         else
-            QBCore.Functions.Notify("You cannot do this..", "error")
+            QBCore.Functions.Notify(Lang:t("error.you_cannot_do_this"), 'error')
         end
     end, "meth_cured",20)
 end)

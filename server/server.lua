@@ -3,15 +3,17 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local Cooldown = false
 
 RegisterServerEvent('ps-methrun:server:startr', function()
-    local player = QBCore.Functions.GetPlayer(source)
+    local src = source
+	local Player = QBCore.Functions.GetPlayer(src)
 
-	if player.PlayerData.money['cash'] >= Config.RunCost then
-		player.Functions.RemoveMoney('cash', Config.RunCost)
+	if Player.PlayerData.money['cash'] >= Config.RunCost then
+		Player.Functions.RemoveMoney('cash', Config.RunCost)
         Player.Functions.AddItem("casekey", 1)
         TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items["casekey"], "add")
-		TriggerClientEvent("ps-methrun:server:runactivate", source)
+		TriggerClientEvent("ps-methrun:server:runactivate", src)
+        TriggerClientEvent('QBCore:Notify', src, Lang:t("success.send_email_right_now"), 'success')
 	else
-		TriggerClientEvent('QBCore:Notify', source, 'You Dont Have Enough Money', 'error')
+		TriggerClientEvent('QBCore:Notify', source, Lang:t("error.you_dont_have_enough_money"), 'error')
 	end
 end)
 
@@ -54,6 +56,8 @@ RegisterServerEvent('ps-methrun:server:rewardpayout', function ()
     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items["meth_cured"], "remove")
 
     Player.Functions.AddMoney('cash', Config.Payout)
+
+    local chance = math.random(1, 100)
 
     if chance >= 85 then
         Player.Functions.AddItem(Config.Item, Config.MethAmount)
